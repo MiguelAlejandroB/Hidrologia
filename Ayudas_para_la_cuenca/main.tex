@@ -1,0 +1,1328 @@
+% ==== Document Class & Packages =====
+\documentclass[12pt,hidelinks]{article}
+	\usepackage[explicit]{titlesec}
+	\usepackage{titletoc}
+	\usepackage{tocloft}
+	\usepackage{charter}
+	\usepackage[many]{tcolorbox}
+	\usepackage{amsmath}
+	\usepackage{float}
+	\usepackage{graphicx}
+	\usepackage{multirow}
+	\usepackage{xcolor}
+	\usepackage{tikz,lipsum,lmodern}
+	\usetikzlibrary{calc}
+	\usepackage[spanish]{babel}
+	\usepackage{fancyhdr}
+	\usepackage{mathrsfs}
+	\usepackage{empheq}
+	\usepackage{fourier}% change to lmodern if fourier is no available
+	\usepackage{wrapfig}
+	\usepackage{fancyref}
+	\usepackage{hyperref}
+	\usepackage{cleveref}
+	\usepackage{listings}
+	\usepackage{varwidth}
+	\usepackage{longfbox}
+	\usepackage{geometry}
+	\usepackage{longtable}
+	\usepackage{marginnote}
+	\usepackage{marvosym}
+	\tcbuselibrary{theorems}
+	\tcbuselibrary{breakable, skins}
+	\tcbuselibrary{listings, documentation}
+	\geometry{
+		letterpaper,
+		left=25mm,
+		right=20mm,
+		top=20mm}
+% ========= Path to images ============
+%   - Direct the computer on the path 
+% 	  to the folder containg the images
+% =====================================
+\graphicspath{{./images/}}
+% ============= Macros ================
+\newcommand{\fillin}{\underline{\hspace{.75in}}{\;}}
+\newcommand{\solution}{\textcolor{mordantred19}{Solution:}}
+\setlength{\parindent}{0pt}
+\addto{\captionsenglish}{\renewcommand*{\contentsname}{Table of Contents}}
+\linespread{1.2}
+% ======== Footers & Headers ==========
+\cfoot{\thepage}
+\chead{}\rhead{}\lhead{}
+% =====================================
+%\renewcommand{\thesection}{\arabic{section}}
+%\newcommand\sectionnumfont{% font specification for the number
+%	\fontsize{380}{130}\color{myblueii}%\selectfont}
+%\newcommand\sectionnamefont{% font specification for the name "PART"
+%	\normalfont\color{white}\scshape\small\bfseries }
+% ============= Colors ================
+% ----- Red -----
+\definecolor{mordantred19}{rgb}{0.68, 0.05, 0.0}
+% ----- Blue -----
+\definecolor{st.patrick\'sblue}{rgb}{0.14, 0.16, 0.48}
+\definecolor{teal}{rgb}{0.0, 0.5, 0.5}
+\definecolor{beaublue}{rgb}{0.74, 0.83, 0.9}
+\definecolor{mybluei}{RGB}{0,173,239}
+\definecolor{myblueii}{RGB}{63,200,244}
+\definecolor{myblueiii}{RGB}{199,234,253}
+% ---- Yellow ----
+\definecolor{blond}{rgb}{0.98, 0.94, 0.75}
+\definecolor{cream}{rgb}{1.0, 0.99, 0.82}
+% ----- Green ------
+\definecolor{emerald}{rgb}{0.31, 0.78, 0.47}
+\definecolor{darkspringgreen}{rgb}{0.09, 0.45, 0.27}
+% ---- White -----
+\definecolor{ghostwhite}{rgb}{0.97, 0.97, 1.0}
+\definecolor{splashedwhite}{rgb}{1.0, 0.99, 1.0}
+% ---- Grey -----
+\definecolor{whitesmoke}{rgb}{0.96, 0.96, 0.96}
+\definecolor{lightgray}{rgb}{0.92, 0.92, 0.92}
+\definecolor{floralwhite}{rgb}{1.0, 0.98, 0.94}
+% ========= Part Format ==========
+\titleformat{\Capítulo}
+{\normalfont\huge\filleft}
+{}
+{20pt}
+{\begin{tikzpicture}[remember picture,overlay]
+	\fill[myblueiii] 
+	(current page.north west) rectangle ([yshift=-13cm]current page.north east);   
+\node[
+	fill=mybluei,
+	text width=2\paperwidth,
+	rounded corners=6cm,
+	text depth=18cm,
+	anchor=center,
+	inner sep=0pt] at (current page.north east) (parttop)
+	{\thepart};%
+\node[
+	anchor=south east,
+	inner sep=0pt,
+	outer sep=0pt] (partnum) at ([xshift=-20pt]parttop.south) 
+	{\sectionnumfont\thesection};
+\node[
+	anchor=south,
+	inner sep=0pt] (partname) at ([yshift=2pt]partnum.south)   
+	{\sectionnamefont SECTION};
+\node[
+	anchor=north east,
+	align=right,
+	inner xsep=0pt] at ([yshift=-0.5cm]partname.east|-partnum.south) 
+	{\parbox{.7\textwidth}{\raggedleft#1}};
+\end{tikzpicture}%
+}
+% ========= Hyper Ref ===========
+\hypersetup{
+	colorlinks= false
+}
+% ========= Example Boxes =============
+\tcbset{
+	defstyle/.style={
+		fonttitle=\bfseries\upshape, 
+		fontupper=\slshape,
+		arc=0mm, 
+		beamer,
+		colback=blue!5!white,
+		colframe=blue!75!black},
+	theostyle/.style={
+		fonttitle=\bfseries\upshape, 
+		fontupper=\slshape,
+		colback=red!10!white,
+		colframe=red!75!black},
+	visualstyle/.style={
+		height=6.5cm,
+		breakable,
+		enhanced,
+		leftrule=0pt,
+		rightrule=0pt,
+		bottomrule=0pt,
+		outer arc=0pt,
+		arc=0pt,
+		colframe=mordantred19,
+		colback=lightgray,
+		attach boxed title to top left,
+		boxed title style={
+			colback=mordantred19,
+			outer arc=0pt,
+			arc=0pt,
+			top=3pt,
+			bottom=3pt,
+		},
+		fonttitle=\sffamily,},
+	discussionstyle/.style={
+		height=6.5cm,
+		breakable,
+		enhanced,
+		rightrule=0pt,
+		toprule=0pt,
+		outer arc=0pt,
+		arc=0pt,
+		colframe=mordantred19,
+		colback=lightgray,
+		attach boxed title to top left,
+		boxed title style={
+			colback=mordantred19,
+			outer arc=0pt,
+			arc=0pt,
+			top=3pt,
+			bottom=3pt,
+		},
+		fonttitle=\sffamily},
+	mystyle/.style={
+		height=6.5cm,
+		breakable,
+		enhanced,
+		rightrule=0pt,
+		leftrule=0pt,
+		bottomrule=0pt,
+		outer arc=0pt,
+		arc=0pt,
+		colframe=mordantred19,
+		colback=lightgray,
+		attach boxed title to top left,
+		boxed title style={
+			colback=mordantred19,
+			outer arc=0pt,
+			arc=0pt,
+			top=3pt,
+			bottom=3pt,
+		},
+		fonttitle=\sffamily},
+	aastyle/.style={
+			height=3.5cm,
+			enhanced,
+			colframe=teal,
+			colback=lightgray,
+			colbacktitle=floralwhite,
+			fonttitle=\bfseries,
+			coltitle=black,
+		attach boxed title to top center={
+	  		yshift=-0.25mm-\tcboxedtitleheight/2,
+	   		yshifttext=2mm-\tcboxedtitleheight/2}, 
+		boxed title style={boxrule=0.5mm,
+			frame code={ \path[tcb fill frame] ([xshift=-4mm]frame.west)
+				-- (frame.north west) -- (frame.north east) -- ([xshift=4mm]frame.east)
+				-- (frame.south east) -- (frame.south west) -- cycle; },
+			interior code={ 
+				\path[tcb fill interior] ([xshift=-2mm]interior.west)
+				-- (interior.north west) -- (interior.north east)
+				-- ([xshift=2mm]interior.east) -- (interior.south east) -- (interior.south west)
+				-- cycle;} }
+				},
+	examstyle/.style={
+		height=9.5cm,
+		breakable,
+		enhanced,
+		rightrule=0pt,
+		leftrule=0pt,
+		bottomrule=0pt,
+		outer arc=0pt,
+		arc=0pt,
+		colframe=mordantred19,
+		colback=lightgray,
+		attach boxed title to top left,
+		boxed title style={
+			colback=mordantred19,
+			outer arc=0pt,
+			arc=0pt,
+			top=3pt,
+			bottom=3pt,
+		},
+		fonttitle=\sffamily},
+	doc head command={
+		interior style={
+			fill,
+			left color=yellow!20!white, 
+			right color=white}},
+	doc head environment={
+		boxsep=4pt,
+		arc=2pt,
+		colback=yellow!30!white,
+		},
+	doclang/environment content=text
+}
+% ============= Boxes ================
+\newtcolorbox[auto counter,number within=section]{example}[1][]{
+	mystyle,
+	title=Example~\thetcbcounter,
+	overlay unbroken and first={
+		\path
+		let
+		\p1=(title.north east),
+		\p2=(frame.north east)
+		in
+		node[anchor=
+			west,
+			font=\sffamily,
+			color=st.patrick\'sblue,
+			text width=\x2-\x1] 
+		at (title.east) {#1};
+	}
+}
+\newtcolorbox[auto counter,number within=section]{longexample}[1][]{
+	examstyle,
+	title=Example~\thetcbcounter,
+	overlay unbroken and first={
+		\path
+		let
+		\p1=(title.north east),
+		\p2=(frame.north east)
+		in
+		node[anchor=
+		west,
+		font=\sffamily,
+		color=st.patrick\'sblue,
+		text width=\x2-\x1] 
+		at (title.east) {#1};
+	}
+}
+\newtcolorbox[auto counter,number within=section]{example2}[1][]{
+	aastyle,
+	title=Example~\thetcbcounter,{}
+}
+\newtcolorbox[auto counter,number within=section]{discussion}[1][]{
+	discussionstyle,
+	title=Discussion~\thetcbcounter,
+	overlay unbroken and first={
+		\path
+		let
+		\p1=(title.north east),
+		\p2=(frame.north east)
+		in
+		node[anchor=
+		west,
+		font=\sffamily,
+		color=st.patrick\'sblue,
+		text width=\x2-\x1] 
+		at (title.east) {#1};
+	}
+}
+\newtcolorbox[auto counter,number within=section]{visualization}[1][]{
+	visualstyle,
+	title=Visualization~\thetcbcounter,
+	overlay unbroken and first={
+		\path
+		let
+		\p1=(title.north east),
+		\p2=(frame.north east)
+		in
+		node[anchor=
+		west,
+		font=\sffamily,
+		color=st.patrick\'sblue,
+		text width=\x2-\x1] 
+		at (title.east) {#1};
+	}
+}
+% --------- Theorems ---------
+\newtcbtheorem[number within=subsection,crefname={definition}{definitions}]%
+	{Definition}{Definition}{defstyle}{def}%
+\newtcbtheorem[use counter from=Definition,crefname={theorem}{theorems}]%
+	{Theorem}{Theorem}{theostyle}{theo}
+	%
+\newtcbtheorem[use counter from=Definition]{theo}{Theorem}%
+{
+	theorem style=plain,
+	enhanced,
+	colframe=blue!50!black,
+	colback=yellow!20!white,
+	coltitle=red!50!black,
+	fonttitle=\upshape\bfseries,
+	fontupper=\itshape,
+	drop fuzzy shadow=blue!50!black!50!white,
+	boxrule=0.4pt}{theo}
+\newtcbtheorem[use counter from=Definition]{DashedDefinition}{Definition}%
+ {
+ 	enhanced,
+ 	frame empty,
+ 	interior empty,
+ 	colframe=darkspringgreen!50!white,
+	coltitle=darkspringgreen!50!black,
+	fonttitle=\bfseries,
+	colbacktitle=darkspringgreen!15!white,
+	borderline={0.5mm}{0mm}{darkspringgreen!15!white},
+	borderline={0.5mm}{0mm}{darkspringgreen!50!white,dashed},
+	attach boxed title to top center={yshift=-2mm},
+	boxed title style={boxrule=0.4pt},
+	varwidth boxed title}{theo}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newtcblisting[auto counter,number within=section]{disexam}{
+	skin=bicolor,
+	colback=white!30!beaublue,
+	colbacklower=white,
+	colframe=black,
+	before skip=\medskipamount,
+	after skip=\medskipamount,
+	fontlower=\footnotesize,
+	listing options={style=tcblatex,texcsstyle=*\color{red!70!black}},}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\renewcommand\tablename{Tabla}
+\renewcommand\listtablename{Índice de Tablas}
+
+\begin{titlepage}
+	\centering % Center everything on the title page
+	\scshape % Use small caps for all text on the title page
+	\vspace*{1.5\baselineskip} % White space at the top of the page
+% ===================
+%	Title Section 	
+% ===================
+\begin{figure}
+        \centering
+		\scalebox{0.2}{\includegraphics{unal.jpg}}
+	\end{figure}
+	\vspace{2\baselineskip} 
+	\rule{13cm}{1.6pt}\vspace*{-\baselineskip}\vspace*{2pt} % Thick horizontal rule
+	\rule{13cm}{0.4pt} % Thin horizontal rule
+	
+		\vspace{0.8\baselineskip} % Whitespace above the title
+% ========== Title ===============	
+	{	\Huge Ayudas Para Hidrología: Herramientas de QGIS\\ 
+			\vspace{4mm}
+		}
+% ======================================
+		\vspace{0.8\baselineskip} % Whitespace below the title
+	\rule{13cm}{0.4pt}\vspace*{-\baselineskip}\vspace{3.2pt} % Thin horizontal rule
+	\rule{13cm}{1.6pt} % Thick horizontal rule
+	
+		\vspace{\baselineskip} % Whitespace after the title block
+% =================
+%	Information	
+% =================
+    \vspace*{2\baselineskip}
+	{\huge  Carlos A. Gonzalez M. \\
+	
+	\large Profesor Asociado \\
+	Departamento de Ingeniería Civil y Agrícola\\
+	Universidad Nacional de Colombia\\  
+		Sede Bogotá\\
+	2025	} 
+		\\
+\end{titlepage}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%------------------------------------------------
+
+%\begin{document}
+
+%\renewcommand{\tablename}{Tabla}
+\begin{titlepage}
+    \thispagestyle{empty}
+    \begin{center}
+    
+ %   \begin{figure}
+  %      \centering%
+   %     \includegraphics[scale=0.3]{unal.jpg}%
+    %\end{figure} 
+    %\\ [0.5cm]
+%\large{UNIVERSIDAD NACIONAL DE COLOMBIA \\ Sede Bogotá}
+    
+
+ %   \vspace{0.5cm}
+    
+        \textbf{AYUDAS PARA HIDROLOGÍA
+2022: }\\[1.0in]
+BREVE DESCRIPCIÓN DEL USO DE LAS IMÁGENES\\ DE
+SATÉLITE PARA DELIMITAR CUENCAS\\ HIDROGRÁFICAS
+EN QGIS\\[1.0in]
+ \textbf{Carlos A. González M.}\\
+\textbf{Profesor Asociado}  \\[1.0in]
+   \textbf{UNIVERSIDAD NACIONAL DE COLOMBIA}\\
+   FACULTAD DE INGENIERÍA CIVIL Y AGRÍCOLA\\
+   BOGOTÁ D.C.\\
+   \today
+    \end{center}
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\thispagestyle{empty}
+\newpage
+
+\section{ Sistemas de información geográfica}
+\subsection{Definición}
+González-Murillo (2000) y González-Murillo et al., (2001) realizan un compendio de
+definiciones sobre los Sistemas de Información Geográfica (SIG) entre las que se señalan que un SIG
+puede definirse como: un sistema de soporte en la toma de decisiones, que involucra la integración
+de datos espacialmente referenciados, para la solución de problemas del medio ambiente; un
+sistema computarizado que permite la entrada, almacenamiento, análisis, representación y salida
+eficiente de datos espaciales (mapas) y atributos (descriptivos) de acuerdo a especificaciones y
+requerimientos concretos; un compendio de tecnología de información, datos y procedimientos para
+recopilar, almacenar, manipular y presentar mapas e información descriptiva acerca de los atributos
+que pueden ser representados en un mapa; o quizá de una manera más completa como un sistema
+basado en el computador para capturar, visualizar, chequear, validar, almacenar, manipular,
+procesar, integrar, analizar y desplegar información espacialmente referenciada, en mapas, en
+forma tabular, y en formado tridimensional, formada por entidades y atributos asociados. Un SIG es
+una herramienta para el modelamiento y análisis de problemas complejos del mundo real, a los
+cuales se enfrentan los investigadores, gerentes, planificadores; así como un sistema que sirve como
+soporte para la toma de decisiones facilitándoles a las personas que las tomen identificar y evaluar
+soluciones potenciales. \\[0.1 in]
+Estas definiciones concuerdan con la presentada por Neteler & Mitasova (2004) quienes
+describen los SIG como una integración de datos, hardware y software diseñados para el manejo,
+procesamiento, análisis y visualización de datos georreferenciados donde su componente de
+software tiene un profundo impacto en las capacidades para usar efectivamente los datos espaciales
+para resolver un amplio rango de problemas. Sin embargo, Tomlison (2003) señala que al ser los SIG
+una tecnología particularmente horizontal en el sentido de que tiene un amplio espectro de
+aplicaciones en el ámbito industrial e intelectual, estos se resisten a una definición simplista.
+\subsection{Componentes de un SIG}
+Las anteriores definiciones muestran los SIG como sistemas complejos que desarrollan
+diversas actividades en las que no sólo actúan el hardware y software propiamente dicho, sino que
+además se vale de otros componentes para integrarlos como idea global de un SIG. Según Olaya
+(2014) los SIG pueden ser integrados en una serie de subsistemas fundamentales, así: \\[0.1 in]
+\textbf{1.Subsistema de datos:}El cual se encarga de las operaciones de entrada y salida de
+información y la gestión de estos dentro del SIG, permitiendo a los otros subsistemas tener
+acceso a los datos y realizar funciones con base en ellos.\\[0.1 in]
+\textbf{2.Subsistema de visualización y creación cartográfica: }Crea representaciones a partir de los
+datos permitiendo así la interacción con ellos, incorpora también las funcionalidades de
+edición.\\[0.1 in]
+\textbf{3. Subsistema de análisis:} Contiene métodos y procesos para el análisis de los datos
+geográficos.\\[0.1 in]
+Este mismo autor señala que los SIG también pueden ser entendidos como integración de cinco
+elementos fundamentales que interactúan entre sí, estos son: los datos, como materia prima que
+contiene la información geográfica, los métodos, como el conjunto de formulaciones y metodologías
+que se aplican sobre los datos, el software, el hardware y las personas. González-Murillo et al.,
+(2001) presenta un esquema en el que se evidencia la interacción entre los componentes que
+conforman un SIG.\\
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7
+    ]{fig1.JPG}
+    \caption{Componentes de un SIG. (Tomado de: González-Murillo et al., 2001).}
+    \label{fig:my_label}
+\end{figure}
+\section{Datos geográficos}
+\subsection{Definición,características y componentes }
+Se entiende por Dato Geográfico a entidades espacio-temporales que cuantifican la
+distribución, el estado y los vínculos de los distintos fenómenos u objetos naturales y sociales (IGAC,
+2018), estos se caracterizan por los siguientes elementos.
+\begin{itemize}
+\item Posición absoluta: Describe la posición del objeto bajo un sistema de coordenadas absoluto,
+ya sea rectangular (x, y, z) o de coordenadas cilíndricas (r,$\teta$, z) el cual se puede expandir a
+un sistema de cuatro coordenadas al incluir la dimensión tiempo, (x, y, z, t) o (r,$\teta$, z, t).
+\item Posición relativa: Describe la posición del dato frente a otros elementos del entorno.
+\item Representación geométrica: Se refiere a la descripción geométrica del objeto bajo el tipo de
+representación, sea esta de tipo punto, línea, polígono, etc.
+\item Atributos o características: propias que describen el dato geográfico.
+
+\end{itemize}
+A su vez, los datos geográficos están integrados por tres componentes, los cuales son:
+
+\textbf{1. Componente espacial:} hace referencia a tres elementos: la localización geográfica, las
+propiedades espaciales y las relaciones espaciales:
+\begin{itemize}
+    \item Localización Geográfica: Hace referencia a la posición de los elementos en el espacio
+descritos todos bajo un mismo sistema de referencia único, se asocia a la posición
+absoluta.
+\item Propiedades espaciales: Se puede definir como las características que describen al
+objeto, por ejemplo, para un polígono, algunas propiedades espaciales son el área
+y el perímetro o para una línea, la pendiente y la orientación.
+\item ▪ Relaciones espaciales: Describe la posición relativa de los objetos gracias a las
+relaciones que existen entre sí, estas pueden ser relaciones topológicas como lo son
+la adyacencia, contigüidad, conectividad o inclusión ó relaciones geométricas.
+\end{itemize}
+\textbf{2. Componente temático:}Son las características (atributos) de los objetos expresados como
+variables bajo una escala de medida, las cuales diferencian a los objetos por el valor que
+este presenta en una determinada variable. Mientras la componente espacial es
+generalmente un valor, la componente temática puede ser de distintos tipos: Numéricos y alfanuméricos, dentro del primer grupo se encuentran los de tipo nominal, ordinal, de
+intervalo y razones.
+\textbf{3. Componente temporal:}Considera la dimensión temporal, la cual modifica las otras dos
+
+componentes y permite la representación de los procesos como relaciones espacio-
+temporales o también temático-temporales.
+\subsection{Datos discretos }
+Son aquellos datos que representan a los objetos con límites conocidos y definibles, en donde
+es apreciable el inicio y el término del objeto, vienen usualmente representados por números
+enteros.
+\subsection{Datos Continuos }
+Son aquellos datos en los que la ubicación es una medida del nivel de concentración o su
+relación a partir de un punto fijo en el espacio, un ejemplo de estos datos son la elevación, los niveles
+de lluvia o las concentraciones de algún nutriente en el suelo. Estos datos vienen usualmente
+representados médiante valores de relación e intervalo.
+\section{Modelos de datos}
+Para lograr una representación adecuada en un SIG se hace uso de dos modelos lógicos que
+describen las capas de información espacial, estos son el modelo con formato ráster y el modelo
+con formato vectorial. A groso modo se puede considerar que el formato vectorial es más adecuado
+para la representación de variables cualitativas en donde es necesario dar una descripción de las
+relaciones espaciales, es decir, la descripción tanto de objetos puntuales, lineales o poligonales y la
+relaciones topológicas que existen entre los estos objetos, en cambio, los formato ráster son más
+adecuados para la representación de superficies en donde el espacio puede ser descrito en su
+totalidad por valores puntuales representados por una celda.
+\subsection{Modelo Ráster }
+Este tipo de modelo es una representación en malla o en matriz en donde cada celda o elemento
+adopta un valor único considerado representativo del área que cubre (Sarria, 2006), se basa en la
+división del espacio en elementos regulares y contiguos. Los datos tipo ráster son datos discretos.
+\subsection{Modelo Vector }
+Este formato representa los objetos puntuales por un sistema de coordenadas x, y descritos a
+partir de la geometría euclidiana mediante puntos, segmentos de línea o polígonos (Sarria, 2006).
+Los datos tipo ráster son datos continuos.
+\subsection{Fuentes de información }
+Existen diversas plataformas para la descarga y visualización de datos geográficos, en general
+los modelos ráster son imágenes de satélite, imágenes de radar, fotografías aéreas y DEM, mientras
+los modelos vectoriales son aglomeraciones de cartografía digital producidas por diferentes
+instituciones como el IGAC, ejemplo de ello es el sistema de información geográfica para la
+planeación y ordenamiento territorial SIG-OT etc. A continuación, se listan algunas de las fuentes de
+datos geográficos de acceso libre que se encuentran en la WEB.
+% Table generated by Excel2LaTeX from sheet 'Tabla 1'
+\begin{table}[H]
+  \centering
+  \caption{Fuentes para la descarga de datos tipo ráster y vectorial.}
+    \begin{tabular}{|p{5.215em}|p{5.355em}|p{6.43em}|p{9.855em}|p{8.785em}|}
+    \hline
+    \rowcolor[rgb]{ .816,  .808,  .808} \multicolumn{1}{|c|}{\textbf{Modelo}} & \multicolumn{1}{c|}{\textbf{Fuente}} & \multicolumn{1}{c|}{\textbf{Link}} & \multicolumn{1}{c|}{\textbf{Descripción}} & \multicolumn{1}{c|}{\textbf{Productos}} \bigstrut\\
+    \hline
+    Ráster & Earth\newline{}Explorer de la USGS & https://earthe\newline{}xplorer.usgs.\newline{}gov/ & Es una plataforma del Servicio Geológico de\newline{}Estados Unidos que permite la descarga de\newline{}imágenes satelitales y fotografías aéreas.\newline{}Para la descarga es necesario crear un nuevo\newline{}usuario. & IKONOS-2, ASTER GLOBAL\newline{}DEM,\newline{}GMTED2010,SRTM,\newline{}Landsat\newline{}, Sentinel, LIDAR, IFSAR ORI\newline{}Alaska, SIR-C entre otros \bigstrut\\
+    \hline
+    \multicolumn{1}{|c|}{Ráster} & Glovis Next & https://glovis.\newline{}usgs.gov/ & En esta plataforma también del USGS\newline{}permite la descarga datos de imágenes\newline{}ópticas, requiere la creación de un nuevo\newline{}usuario. & ASTER, IRS, LANDSAT 1-5,\newline{}LANDSAT 4-5, LANDSAT 7,\newline{}LANDSAT 1-8, Sentinel-2 y\newline{}OrbWiew-3 \bigstrut\\
+    \hline
+    Ráster & Remote Pixel & no funciona & Permite la descarga de imágenes LANDSAT-8 y Sentinel 2 & LANDSAT-8 y Sentinel-2 \bigstrut\\
+    \hline
+    \multicolumn{1}{|c|}{Ráster} & Alaska\newline{}Satellite\newline{}Facility & https://search.\newline{}earthdata.nasa.\newline{}gov/search & Permite la descarga de información\newline{}meteorológica, de varios instrumentos de\newline{}medición como higrometros y de diversas\newline{}organizaciones (como Earth Resources\newline{}Observation and Science Center) y proyectos\newline{}como SAFARI 2000. & LANDSAT, LANDSAT-4,\newline{}LANDSAT-5, LANDSAT-7,\newline{}MERRA, METEOSAT-4,\newline{}Nimbus-7, Terra, OrbView-\newline{}2, Aura, CALIPSO \bigstrut\\
+    \hline
+    Ráster & Land Viewer\newline{}(EOS) & \textcolor[rgb]{ .02,  .388,  .757}{https://eos.com\newline{}/landviewer/\newline{}?lat=10.97110\newline{}\&lng=-74.78370\&z=11} & La interfaz LandViewer de EOS permite\newline{}además de la descarga de datos espaciales\newline{}realizar cálculos y aplicaciones de índices de\newline{}imágenes sobre bandas de satélite. Para la\newline{}descarga de imágenes necesita de la\newline{}creación de un nuevo usuario. & CBERS-4, Landsat-7,\newline{}Landsat-8, MODIS\newline{}MCD43A4, NAIP, Sentinel-2 \bigstrut\\
+    \hline
+    
+   
+    
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+
+% Table generated by Excel2LaTeX from sheet 'Tabla 1'
+\begin{table}[H]
+  \centering
+  \caption{Add caption}
+    \begin{tabular}{|p{5.215em}|p{5.355em}|p{6.43em}|p{9.855em}|p{8.785em}|}
+    \hline
+    \multicolumn{1}{|c|}{Ráster} & INPE Image\newline{}Catalog & \textcolor[rgb]{ .02,  .388,  .757}{http://www.dgi\newline{}inpe.br/CDSR/} & Permite la búsqueda y descarga de imágenes\newline{}por satélite o sensor, datos, región o\newline{}navegando geográficamente. El acceso al\newline{}catálogo es gratuito. Sin embargo se requiere\newline{}registro de usuario para realizar la descarga.\newline{}Permite también la descarga de la\newline{}herramienta MARLIN la cual está orientada\newline{}para visualizar y manejar imágenes digitales. & Aqua, CBERS, Landsat, S-\newline{}NPP, Terra, DEIMOS, UK-\newline{}OMC 2. \bigstrut\\
+    \hline
+    Ráster & Earth Science\newline{}Data Interface\newline{}(ESDI) & no funciona & La interfaz ESDI de Global Land Cover Facility\newline{}(GLCF) permite buscar, navegar y descargar\newline{}datos gracias a una búsqueda en mapa, una búsqueda según el producto o una búsqueda según la ruta. & Imágenes de Landsat,\newline{}ASTER, datos de elevación,SRTM, Productos de\newline{}Landsat, MODIS y AVHRR \bigstrut\\
+    \hline
+    \multicolumn{1}{|c|}{Ráster} & The\newline{}Copernicus\newline{}Open Access\newline{}Hub & https://scihub.\newline{}copernicus.eu/ & Esta herramienta proporciona acceso\newline{}completo, gratuito y a diversos productos a\newline{}partir de la Revisión de puesta en marcha en\newline{}órbita (IOCR). & Sentinel-1, Sentinel-2,\newline{}Sentinel-3. \bigstrut\\
+    \hline
+    Ráster & Global Data\newline{}Explorer\newline{}(USGS) & https://gdex.cr.\newline{}usgs.gov/gdex/ & Al igual que la plataforma EarthExplorer de la\newline{}USGS para la descarga de las imágenes se\newline{}necesita el registro de una cuenta. & ASTER DEM, NGA SRTM,\newline{}NGA SRTM 3, NASA SRTM\newline{}1, NASA SRTM 3 \bigstrut\\
+    \hline
+ '\end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+
+\begin{table}[H]
+  \centering
+  \caption{Add caption}
+    \begin{tabular}{|p{5.215em}|p{5.355em}|p{6.43em}|p{9.855em}|p{8.785em}|}
+    \hline
+    Vectorial & ICDE  & \textcolor[rgb]{ .02,  .388,  .757}{https://www.icd\newline{}e.gov.co/} & La Infraestructura Colombiana de Datos\newline{}Espaciales es una red que ofrece el acceso a\newline{}información de datos tipo vectorial de\newline{}entidades como IDEAM, IGAC, IDECA, UPRA,\newline{}entre otros, en donde permite la conexión\newline{}con servicios WMS, WFS y WCS1. & ANH, ANLA, DANE, IDESC,\newline{}IDECA, IAvH, IDEAM,\newline{}INVEMAR, IPSE, IGAC,\newline{}INVIAS, SGC, UPME,CAR y\newline{}UPRA \bigstrut\\
+    \hline
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+
+\section{Sistemas de coordenadas }
+
+\subsection{Sistemas de coordenadas geográficas}
+Un sistema de coordenadas geográficas se entiende como un sistema de referencia que
+utiliza dos coordenadas angulares denominadas latitud y longitud para determinar cualquier
+posición sobre la superficie terrestre. La coordenada latitud mide el ángulo entre el punto de estudio
+y el ecuador, se expresa en grados sexagesimales siendo el valor mínimo 0° y el valor máximo 90°.
+Al ecuador le corresponde la denominación de latitud 0, hacia el norte el valor angular se expresa
+junta a la letra N y hacia el sur del ecuador la letra utilizada es S.\\[0.05 in]
+
+La longitud mide el ángulo desde un punto de referencia denominado el meridiano de
+Greenwich (Londres) a lo largo del ecuador, al igual que la latitud se expresa en grados
+sexagesimales.
+\subsection{Proyeccción cartográfica}
+En general un objeto puede ser descrito por coordenadas planas que resultan de realizar
+una proyección sobre la superficie de la tierra, estás pueden ser de
+\begin{figure}[H]
+    \centering
+    \includegraphics{fi2.JPG}
+    \caption{Tipos de proyecciones. Tomado de: https://nopuedonodebo.wordpress.com/\newline{}2015/04/21/tipos-de-
+proyecciones-cartograficas/. Consultado: 03/05/2018.}
+    \label{fig:my_label}
+\end{figure}
+El sistema de referencia, se puede expresar como el grupo de convenciones que un
+observador emplea para la medición de las magnitudes físicas de un sistema determinado. Esto
+quiere decir que los valores de dichas magnitudes están vinculados al sistema de referencia en
+cuestión (depende de los ejes y del origen del sistema de referencia, por lo tanto varia la magnitud
+de la medición realizada entre un sistema de referencia a otro).\\[0.05 in]
+Dado que un sistema de referencia es un modelo (una concepción) éste es materializado mediante puntos reales denominado marco de referencia. Si el origen de coordenadas del sistema
+coincide con el centro de masas terrestre éste se define como Sistema Geocéntrico de Referencia o
+Sistema Coordenado Geocéntrico mientras que, si dicho origen está desplazado del geocentro, se
+conoce como Sistema Geodésico Local.\\[0.03 in]
+
+
+
+Para Colombia se utiliza el sistema de coordenadas geográficas mundial WGS84 y la proyección cartográfica oficial es el sistema Gauss-Krüger, una representación conforme del
+elipsoide sobre un plano con origen en la pilastra sur del Observatorio Astronómico de Bogotá y que
+porta orígenes complementarios a 3° y 6° de longitud al este y oeste, a éstas coordenadas se les denomina Coordenadas MAGNA y al marco geocéntrico de referencia se le denomina MAGNA-SIRGAS. Anteriormente se utilizaba como referencia un sistema de coordenadas local cuyo elipsoide de referencia se ajustaba a las condiciones regionales, pero no constituía un sistema compatible a nivel internacional, a este antiguo sistema se le denomina Datum Bogotá y actualmente se realiza
+la transición al marco de referencia MAGNA-SIRGAS. El IGAC dispone de una herramienta
+denominada MAGNA SIRGAS PRO que realiza las transformaciones entre sistemas para una
+coordenada dada. Estas relaciones entre sistemas de referencia se presentan en la Figura 14.\\[0.05 in]
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{fig3.JPG}
+    \caption{Relación entre sistemas de referencia utilizados en Colombia.}
+    \label{fig:my_label}
+\end{figure}
+Así, para el punto de origen Bogotá (pilastra sur del Observatorio Astronómico) se tiene una
+coordenada geográfica y una coordenada plana proyectada mediante el sistema Gauss-Krüger, lo
+mismo sucede para cada uno de los puntos del territorio nacional, estas coordenadas son.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{fig4.JPG}
+    \caption{Coordenadas MAGNA de los orígenes Gauss-Krüger en Colombia (IGAC, 2004)}
+    \label{fig:my_label}
+\end{figure}
+
+
+\section{Uso de QGIS para la delimitación de cuencas}
+  En esta parte del documento se realizan tres formas de delimitación de la cuenca hidrográfica, a
+saber:
+\begin{itemize}
+    
+ \item Usando QGIS y realizar las funciones de delimitación con una extensión del GRASS, que se
+encuentra en la caja de herramientas (Processing Toolbox) dentro de QGIS (Ver acápite
+5.4). Esta opción parece ser que presenta problemas con las cuencas grandes.
+ \item  Igual a la anterior pero usando el GRASS integrado como complemento del QGIS, cuando
+se descarga aparece QGIS Desktop 2.18.18 with GRASS 7.4.0, cuyas versiones pueden
+variar (Ver acápite 5.5).
+ \item Usando QGIS, aunque esta vez se usa la herramienta del (Processing Toolbox) de SAGA
+(Ver acápite 5.6). Esta herramienta tiene la ventaja que procesa algunas características
+fisiográficas de la cuenca como el orden de los cauces y la longitud del cauce principal, de
+manera mas clara.
+\end{itemize}
+\textbf{Proceso a seguir}\\
+El primer paso consiste en ubicar geográficamente la cuenca hidrográfica a estudiar para posteriormente seleccionar el tipo de DEM que se puede usar para tal fin. Entre estos se encuentran el del SRTM (30.0x30.0) (https://gdex.cr.usgs.gov/gdex/ ) y el de ALOS PALSAR (12.5x12.5)
+(https://vertex.daac.asf.alaska.edu/) el cual es más preciso, pero consume mayor memoria, aunque depende de la escala de trabajo que se requiera como usuario. Hoy en día el DEM de 30X30 se utiliza para escalas mayores a 1:25.000, mientras que El DEM de ALOS PALSAR se utiliza para trabajar en
+escalas menores a 1:25.000 llegando aproximadamente a escalas 1:15.000, para escalas inferiores se deben utilizar otros sensores como DRONES.
+\subsection{Descarga del Modelo Digital de Elevación}
+Para descargar el DEM de ALOS PALSAR se puede utilizar la plataforma Vertex de Alaska
+Satellite Facility descrita en el apartado fuentes de información. La Figura 15 presenta la plataforma.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Plataforma Vertex para la descarga de DEM de ALOS PALSAR}
+    \label{fig:my_label}
+\end{figure}
+
+Para la descarga de información se requiere de la creación de un nuevo usuario, para ello se dirige a la pestaña Earthdata Login y en la pestaña emergente Register, una vez diligenciado los datos solicitados y después de responder el correo de confirmación, se dirige nuevamente a la plataforma e ingresa con el usuario registrado.\\[0.04 in]
+El primer paso para la descarga de información es limitar la zona de estudio. Para este fin existen dos opciones, ubicar con el cursor sobre el mapa el polígono con el área de estudio o ingresar las coordenadas geográficas de los vértices del polígono. La búsqueda se puede limitar por un rango
+de fechas en las cuales fueron adquiridas las imágenes. En la siguiente imagen se muestra el área de estudio ya limitada en el mapa de la plataforma.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Ubicación de la zona de estudio en la plataforma Vertex}
+    \label{fig:my_label}
+\end{figure}
+En el mismo panel de búsqueda (izquierda) en la pestaña Dataset se encuentran los diferentes
+productos disponibles para la descarga, en este caso se selecciona ALOS PALSAR y se realiza la búsqueda con el botón Search, en seguida, se activará un panel en la parte derecha de la plataforma con las diferentes entradas para el satélite seleccionado. En este caso los productos ALOS PALSAR
+están disponibles según el modo de instrumento (Instrument mode) bajo tres categorías FBS (Fine Beam Single polarisation), FBD (Fine Beam Double polarisation) y PLR (Polarimetry mode). En la
+siguiente imagen se muestra la plataforma con este panel desplegado. Para efectos del trabajo se usará INSTRUMENT MODE FBS.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Productos a descargar en la plataforma Vertex}
+    \label{fig:my_label}
+\end{figure}
+Para descargar un DEM se puede utilizar cualquiera de los tres modos de instrumento, se dirige a la opción (u opciones) que abarquen completamente el área de estudio. Se selecciona la imagen de interés y en seguida se abre una ventana emergente con la descripción del producto. Los DEM se denominan para cada uno de los modos de instrumento como Hi-Res Terrain Corrected,posteriormente se debe pulsar la opción Download para iniciar la descarga.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Figura 18. Descripción del producto a descargar.}
+    \label{fig:my_label}
+\end{figure}
+\subsection{Ingresar el DEM a QGIS}
+Es importante antes de añadir cualquier capa al programa realizar una configuración inicial de las propiedades del proyecto, para ello se dirige a la pestaña proyecto en la barra de herramientas y después propiedades. Lo que se busca configurar aquí es el Sistema de Referencia de Coordenadas SRC, cuando se ingresa un dato que no está configurado en el sistema de referencia del proyecto, el programa automáticamente convierte la capa a las coordenadas del proyecto, esto resulta ventajosos cuando existe compatibilidades entre los sistemas utilizados y es únicamente necesario
+realizar una conversión, sin embargo para aquellos datos que se encuentran en sistemas no compatibles (como los datos de un Sistema Geodésico Local) al ser necesaria una transformación de datos, la conversión de coordenadas al vuelo ocasiona errores de posicionamiento, por ende, se recomienda conocer cuál es el SRC del dato que se va a utilizar. En la Figura 19 se muestra la pestaña con las propiedades del proyecto.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Sistema de Referencia de Coordenadas (SRC) del proyecto.}
+    \label{fig:my_label}
+\end{figure}
+
+El procedimiento a realizar requiere una sola imagen, ésta se puede ingresar como una nueva
+capa ráster, basta con seleccionar la opción capa<añadir capa<añadir capa ráster.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Sistema de Referencia de Coordenadas (SRC) del proyecto.}
+    \label{fig:my_label}
+\end{figure}
+
+El procedimiento a realizar requiere una sola imagen, ésta se puede ingresar como una nueva
+capa ráster, basta con seleccionar la opción capa<añadir capa<añadir capa ráster.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{DEM Alos Palsar para realizar la delimitación de la cuenca.}
+    \label{fig:my_label}
+\end{figure}
+Si en cambio se deben utilizar diferentes imágenes DEM contiguas, es posible combinarlos en una sola imagen mediante la opción de combinar ubicada en la pestaña ráster<miscelánea<combinar. Las diferentes DEM se cargan a QGIS como se reseñó anteriormente y se seleccionan en la opción archivos de entrada. Algunas capturas se presentan en las Figuras 21,22y 23.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Combinación de varios DEM en una sola imagen.}
+    \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Herramienta para crear un Ráster Virtual (Combinar diversos DEM).}
+    \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Resultado de la combinación de varios DEM en una sola imagen.}
+    \label{fig:my_label}
+\end{figure}
+Para conocer las propiedades de la capa, clic derecho sobre la imagen, propiedades<metadatos. Una vez en la pestaña se puede observar la descripción del conjunto de datos, el número de bandas y sus dimensiones, el tamaño del pixel (resolución espacial), el tipo de dato y el SRC. En la Figura 24 se muestra las propiedades de un DEM ALOS PALSAR.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Propiedades de la capa Ráster (DEM).}
+    \label{fig:my_label}
+\end{figure}
+\subsection{Configuraciones previas}
+Para el manejo de GRASS en Qgis se debe crear una base de trabajo previamente sobre la cual se realizarán todas las operaciones. Se debe ir a la pestaña de complemento (plugins) < administrar e instalar complementos (manage and install plugins), el cual abre una ventana, sobre esta ventana se debe escoger todos (all) y al costado derecho poner en buscar la palabra GRASS ( Figura 25.), y dar click en la parte inferior donde se encuentra el botón “actualice todo” (“ upgrade all”).
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Instalar plugins GRASS.}
+    \label{fig:my_label}
+\end{figure}
+Se debe seguir la siguiente dirección barra de herramientas < complementos < nuevo directorio de mapas para configurar una ruta sobre la cual se trabajará. Allí se debe definir la base de trabajo, posteriormente una creación de localización (sobre la última carpeta se guardan los archivos generados por GRASS), se pica en siguiente (next), se define el sistema de proyección de coordenadas WGS 84 / UTM zone 18N (que corresponde al sistema de referencia que por defecto tiene el DEM de ALOS PALSAR, si se desea trabajar en MAGNA SIRGAS se debe de reproyectar el DEM exportándolo al sistema de proyección deseada). A continuación se debe definir la región de estudio, para ello, seleccionamos Colombia en la opción de establecer la extensión qgis actual, y aplicar < siguiente, por último, se debe agregar el nombre deseado para nuevo directorio de mapas como se evidencia en la figura (Figura 28).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Creación de directorio de trabajo de GRASS.}
+    \label{fig:my_label}
+\end{figure}
+
+
+\subsection{Correción del DEM}
+Para realizar algunos procedimientos en la delimitación de cuencas es necesario instalar la caja de herramientas de procesado, para ello se va a complementos<Administrar e instalar complementos, allí se busca el complemento processing como se muestra en la Figura 25.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Resultado de la combinación de varios DEM en una sola imagen.}
+    \label{fig:my_label}
+\end{figure}
+En los casos en que sea necesario aplicar un corte al DEM para limitarlo a un área determinada se utiliza la opción clipper (Figura 26), ésta se encuentra en la pestaña raster<extracción<clipper o en algunos casos denominada extracción por extensión. La salida del proceso es un DEM con el área limitada, esta función sirve para cortar un archivo ráster al tamaño deseado manteniendo las propiedades del ráster original como la georeferenciación, la resolución espacial, entre otros.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{ Herramienta Clipper para realizar un corte al DEM.}
+    \label{fig:my_label}
+\end{figure}
+Algunos análisis hidrológicos se dificultan por la presencia de huecos o datos faltantes en el DEM, por ello es necesario realizar la oportuna corrección, para esto se va a la pestaña procesos<caja de herramientas y allí se busca la opción r.neighbors, para conocer la manera en la que trabaja esta herramienta puede buscarla en la ayuda de GRASS GIS online (Figura 27). Su proceso se basa en que cada valor de categoría de celda sea función de los valores de las celdas que lo rodean, y almacena nuevos valores de celda en una nueva capa de mapa ráster.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Ayuda de GRASS GIS online para la herramienta r.neighbors.}
+    \label{fig:my_label}
+\end{figure}
+Si por ejemplo existe una celda con un valor de 10 y alrededor hay valores de 1, es lógicopensar que es un error en el DEM. Al aplicar el algoritmo utilizando la operación promedio (Neighborhood operation - average) con un tamaño (Neighborhood Size) de 3, en donde la celda central se encuentra en una matriz de 3x3 el nuevo valor de la celda central es el promedio de las 8 celdas vecinas (es decir 1). El archivo de salida se puede guardar en alguna dirección del ordenador o se puedemantener como un archivo temporal. En la Figura 28 se presenta los datos de entrada de la herramienta r.neighbors.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Interfaz de la herramienta r.neighbors.}
+    \label{fig:my_label}
+\end{figure}
+Para el correcto funcionamiento de la delimitación de la dirección de flujo es necesario realizar correcciones sobre las zonas planas y depresiones que dificultan el análisis hidrológico, para esto es posible utilizar la herramienta r.fill.dir (Figura 29), la cual filtra y genera un mapa de elevación sin depresión y un mapa de dirección de flujo desde un mapa de trama de elevación dado. Esta herramienta se encuentra también en la caja de herramientas. Como entrada al proceso se ingresa la capa ráster a tratar y el resultado son, una nueva capa raster sin depresiones y un mapa de dirección de flujo (Figura 30).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Interfaz de la herramienta r.fill.dir.}
+    \label{fig:my_label}
+\end{figure}
+El procedimiento inicialmente rellena todas las depresiones mediante una sola pasada portodas las celdas de la capa, A continuación, el algoritmo de dirección de flujo intenta encontrar una dirección única para cada celda. Si el algoritmo detecta áreas con pozos, delinea esta área del resto y las depresiones se llenan usando la técnica de las celdas vecinas. Así en cada celda, el código determina la pendiente de las 8 celdas vecinas y asigna la dirección del flujo a la pendiente más alta.Los parámetros de entrada además del DEM a corregir son el formato de dirección, el cual es el tipo de formato en el que se desea crear el mapa de dirección del flujo, hay tres formatos GRASS GIS, ANSWERS y AGNPS, se utiliza el formato grass ya que proporciona los mismos valores de categoríaque r.slope.aspect y que permite una fácil integración con otros procedimientos.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Capas resultantes de la aplicación del procedimiento r.fill.dir.
+}    \label{fig:my_label}
+\end{figure}
+
+\subsection{Delimitación usando la caja de herramientas de GRASS}
+Para realizar algunos procedimientos en la delimitación de cuencas es necesario instalar la caja de herramientas de procesado, para ello se va a complementos<Administrar e instalar complementos, allí se busca el complemento processing como se muestra en la Figura 25.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{fig.jpg}
+    \caption{Resultado de la combinación de varios DEM en una sola imagen.}
+    \label{fig:my_label}
+\end{figure}
+En los casos en que sea necesario aplicar un corte al DEM para limitarlo a un área determinada se utiliza la opción clipper (Figura 26), ésta se encuentra en la pestaña raster<extracción<clipper o en algunos casos denominada extracción por extensión. La salida del proceso es un DEM con el área limitada, esta función sirve para cortar un archivo ráster al tamaño deseado manteniendo las propiedades del ráster original como la georeferenciación, la resolución espacial, entre otros.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{fig.jpg}
+    \caption{ Herramienta Clipper para realizar un corte al DEM.}
+    \label{fig:my_label}
+\end{figure}
+Algunos análisis hidrológicos se dificultan por la presencia de huecos o datos faltantes en el DEM, por ello es necesario realizar la oportuna corrección, para esto se va a la pestaña procesos<caja de herramientas y allí se busca la opción r.neighbors, para conocer la manera en la que trabaja esta herramienta puede buscarla en la ayuda de GRASS GIS online (Figura 27). Su proceso se basa en que cada valor de categoría de celda sea función de los valores de las celdas que lo rodean, y almacena nuevos valores de celda en una nueva capa de mapa ráster.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{fig.jpg}
+    \caption{Ayuda de GRASS GIS online para la herramienta r.neighbors.}
+    \label{fig:my_label}
+\end{figure}
+Si por ejemplo existe una celda con un valor de 10 y alrededor hay valores de 1, es lógicopensar que es un error en el DEM. Al aplicar el algoritmo utilizando la operación promedio (Neighborhood operation - average) con un tamaño (Neighborhood Size) de 3, en donde la celda central se encuentra en una matriz de 3x3 el nuevo valor de la celda central es el promedio de las 8 celdas vecinas (es decir 1). El archivo de salida se puede guardar en alguna dirección del ordenador o se puedemantener como un archivo temporal. En la Figura 28 se presenta los datos de entrada de la herramienta r.neighbors.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{fig.jpg}
+    \caption{Interfaz de la herramienta r.neighbors.}
+    \label{fig:my_label}
+\end{figure}
+Para el correcto funcionamiento de la delimitación de la dirección de flujo es necesario realizar correcciones sobre las zonas planas y depresiones que dificultan el análisis hidrológico, para esto es posible utilizar la herramienta r.fill.dir (Figura 29), la cual filtra y genera un mapa de elevación sin depresión y un mapa de dirección de flujo desde un mapa de trama de elevación dado. Esta herramienta se encuentra también en la caja de herramientas. Como entrada al proceso se ingresa la capa ráster a tratar y el resultado son, una nueva capa raster sin depresiones y un mapa de dirección de flujo (Figura 30).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{fig.jpg}
+    \caption{Interfaz de la herramienta r.fill.dir.}
+    \label{fig:my_label}
+\end{figure}
+El procedimiento inicialmente rellena todas las depresiones mediante una sola pasada portodas las celdas de la capa, A continuación, el algoritmo de dirección de flujo intenta encontrar una dirección única para cada celda. Si el algoritmo detecta áreas con pozos, delinea esta área del resto y las depresiones se llenan usando la técnica de las celdas vecinas. Así en cada celda, el código determina la pendiente de las 8 celdas vecinas y asigna la dirección del flujo a la pendiente más alta.Los parámetros de entrada además del DEM a corregir son el formato de dirección, el cual es el tipo de formato en el que se desea crear el mapa de dirección del flujo, hay tres formatos GRASS GIS, ANSWERS y AGNPS, se utiliza el formato grass ya que proporciona los mismos valores de categoríaque r.slope.aspect y que permite una fácil integración con otros procedimientos.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Capas resultantes de la aplicación del procedimiento r.fill.dir.}
+    \label{fig:my_label}
+\end{figure}
+
+5.3. Delimitación usando la caja de herramientas de GRASS
+Para la delimitación de las cuencas se utiliza la herramienta r.watershed, al igual que las anteriores basta con buscarla en la caja de herramientas, este algoritmo genera un conjunto de mapas que indican, la acumulación de flujo, la dirección de drenaje, la ubicación de arroyos y la delimitación de cuencas hidrográficas.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{  Herramienta r.watershed.}
+ \label{fig:my_label}
+\end{figure}
+El ráster de entrada es el ráster corregido resultado del algoritmo r.fill.dir, este se carga enla opción Elevation (Figura 31).
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{  Herramienta r.watershed.}
+ \label{fig:my_label}
+\end{figure}
+La capa ráster con la delimitación de las cuencas se presenta en la Figura 33.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{  Capa Ráster con la delimitación de las cuencas}
+ \label{fig:my_label}
+\end{figure}
+Por último para transformar la capa ráster a una de tipo vectorial que permita una mejor visualización y utilizar la tabla de atributos se utiliza la herramienta t.to.vector (Figura 34), la salida es un archivo vectorial con la subdivisión de las cuencas (Figura 35).
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{ Herramienta t.to.vector.}
+ \label{fig:my_label}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{  Archivo vectorial de salida con las subcuencas.}
+ \label{fig:my_label}
+\end{figure}
+
+\subsection{Delimitación con el complemento GRASS}
+Las opciones antes descritas también se pueden efectuar con el complemento GRASS incluida en la descarga del software QGIS. Cuando el programa se instala en el ordenador, se incluye un Desktop con GRASS integrado como complemento, para ello se abre el programa QGIS DESKTOP WITH GRASS y no el nombrado como QGIS DESKTOP. El siguiente paso consiste en la activación de GRASS como complemento en la pestaña complementos<Administrar e instalar complementos, allí se busca y se selecciona la opción GRASS (Figura 36).
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{  Integración de GRASS desde la pestaña de complementos}
+ \label{fig:my_label}
+\end{figure}
+Para la delimitación es necesario crear un nuevo directorio de mapas, la opción se encuentra en la pestaña complementos<GRASS<Nuevo directorio de complementos. Una vez se abre la ventana emergente (Figura 37) se selecciona la dirección en donde se planea guardar la información del nuevo directorio.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{   Creación de un nuevo directorio de mapas.}
+ \label{fig:my_label}
+\end{figure}
+La siguiente ventana (Figura 38) pide la creación de una nueva localización o la selección de una localización previamente creada.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{   Especificación de la localización del directorio de mapas..}
+ \label{fig:my_label}
+\end{figure}
+En la ventana de proyección (Figura 39) se debe seleccionar el sistema de referencia de coordenadas. Es importante seleccionar el mismo sistema de coordenadas que está siendo utilizado tanto en las propiedades del proyecto como en el DEM (o DEM ́s) a utilizar.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{   Proyección del directorio de mapas.}
+ \label{fig:my_label}
+\end{figure}
+Se selecciona la región predeterminada de GRASS. Aquí se puede seleccionar directamente el país en donde se encuentra el DEM (Figura 40), sin embargo, posteriormente se redefinirá esta región para que case con el DEM.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{   Selección de la región predeterminada de GRASS}
+ \label{fig:my_label}
+\end{figure}
+Por último, se define el nuevo directorio de mapas (Figura 41).
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{   Nombre del directorio de mapas creado.}
+ \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{   Ventana de verificación de la creación del directorio de mapas..}
+ \label{fig:my_label}
+\end{figure}
+Para activar el panel de herramientas de GRASS se da clic derecho en cualquier parte gris de la barra de herramientas y se selecciona el correspondiente panel (Figura 43).
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{   Ubicación del panel de herramientas de GRASS.}
+ \label{fig:my_label}
+\end{figure}
+La redefinición de la región se debe ubicar en la pestaña región del panel de herramientas de GRASS y se selecciona una región que abarque toda la extensión del DEM iniciando la delimitación en la parte superior izquierda (Figura 44). Es aquí donde es importante que la localización, el proyecto y las capas tengan el mismo sistema de referencia, si no es así, puede que al ejecutar el siguiente algoritmo se muestre errores en el procesamiento.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{   Definición de la región de estudio.}
+ \label{fig:my_label}
+\end{figure}
+La siguiente herramienta denominada r.in.gdal.qgis (Figura 45) crea una capa ráster que se encuentra en el directorio de mapas de GRASS y se puede trabajar bajo QGIS. Como se indicó anteriormente es importante mantener el mismo sistema de coordenadas para el proyecto- localización y capa de entrada. Para visualizar la capa en QGIS se da clic a la pestaña Ver Salida.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{   Módulo r.in.gdal.qgis..}
+ \label{fig:my_label}
+\end{figure}
+Para la corrección del DEM se utiliza la misma secuencia de herramientas explicadas anteriormente, el algoritmo de cada una de ellas es el mismo y se diferencia en algunos casos en la entrada de parámetros y en la reducción de algunos mapas de salida. El primer algoritmo a usar es r.fill.dir (Figura 46) que como se referenció da como salida dos capas ráster, una corregida (Figura 47) y otra de dirección de flujo (Figura 48) y como entrada, la capa creada en el paso anterior. Es importante activar la casilla con el recuadro rojo que se encuentra al lado de la entrada del mapa ráster.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{   Módulo r.fill.dir.} 
+ \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{   Ráster de salida con el mapa de elevación sin depresiones.} 
+ \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{   Ráster de salida con el mapa de direcciones de flujo..} 
+ \label{fig:my_label}
+\end{figure}
+La siguiente herramienta es r.watershed (Figura 49), la cual delimita la imagen en diferentes subcuencas según el tamaño mínimo seleccionado para cada cuenca, aquí es importante conocer la dimensión de la imagen, establecer cuencas que son más grandes que la imagen ocasiona lógicamente errores en el algoritmo. Las salidas de la herramienta son las mismas que se describieron anteriormente, acumulación, dirección de drenaje, segmentos de arroyos y cuencas. La entrada es el DEM corregido en el procedimiento anterior (mapa ráster de elevación de salida sin depresiones). En la siguiente imagen se presenta el mapa de acumulación generado con la visualización del panel de GRASS.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{   Módulo r.watershed.}
+ \label{fig:my_label}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{   Verificación del correcto funcionamiento de la herramienta r.watershed.}
+ \label{fig:my_label}
+\end{figure}
+A continuación (Figura 51-53), se muestran los tres mapas restantes generados, dirección
+de drenaje, segmentos de arroyos y cuencas.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{   Mapa Ráster de salida de dirección de drenaje.}
+ \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{   Mapa Ráster de salida de segmentos de arroyos.}
+ \label{fig:my_label}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{   Mapa Ráster de salida de cuencas.}
+ \label{fig:my_label}
+\end{figure}
+Cuando se quiere delimitar una cuenca según un punto de salida de la cuenca se utiliza la herramienta r.water.outlet la cual genera una cuenca desde un mapa de dirección de drenaje. Los valores de salida del mapa ráster son (1) si la celda se encuentra dentro de la cuenca y (0) si esta fuera de ella. En esta herramienta se vuelve crítica la precisión del punto de la coordenada del punto de salida, por ende, se recomienda utilizar la herramienta captura de coordenadas para obtener un valor más preciso de la ubicación del punto de salida, esta herramienta se activa en la pestaña de complementos como se muestra en la Figura 54.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{ Instalación del complemento Captura de Coordenadas y módulo r.water.outlet.  }
+ \label{fig:my_label}
+\end{figure}
+Resta ahora convertir la capa con la nueva cuenca delimitada a una de tipo vectorial para un mejor manejo de la tabla de atributos mediante la herramienta t.to.vector.
+
+\subsection{Uso de la herramienta SAGA}
+
+Otra forma para identificar y rellenar los vacíos de un DEM es mediante el uso de SAGA en la caja de herramientas de procesado, para ello se busca en la caja de herramientas Fill Sinks, el ráster de entrada es el modelo ráster DEM y las capas de salida son un ráster con la dirección de flujo y un ráster corregido. En las Figura 55 se muestra la ventana de entrada de datos.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{ Herramienta Fill Sinks.}
+ \label{fig:my_label}
+\end{figure}
+La siguiente herramienta a utilizar se denomina Strahler order (Figura 56), la cual tiene como entrada el DEM corregido (Filled DEM) y como salida una nueva capa ráster con los segmentos de arroyos, la capa de salida se presenta en la Figura 57.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Procesamiento del algoritmo Strahler order..}
+ \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Capa ráster con los segmentos de arroyos}
+ \label{fig:my_label}
+\end{figure}
+Para establecer una sola capa que contenga la información de los ríos principales se cambia las propiedades de visualización de la capa, para ello se dirige al panel de capas y da clic derecho sobre la capa Strahler Order, allí selecciona la pestaña propiedades, en la ventana emergente se dirige a Estilo (Figura 58) y configura el tipo de renderizador a Unibanda pseudocolor y establece como valor mínimo 1 y como valor máximo 10.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Propiedades de la capa ráster con los segmentos de arroyos }
+ \label{fig:my_label}
+\end{figure}
+Ahora se dirige a la pestaña Ráster<Calculadora Raster y crea una nueva capa en donde se visualice solamente los arroyos con valor mayor o igual a 8 (Figura 59), este valor puede variar, establecer un número menor da como resultado una capa ráster con más arroyos, en la casilla Capa de Salida se selecciona la dirección de salida de la nueva capa ráster y en la Expresión de la calculadora de campos, tal como se indica en la siguiente imagen.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Calculadora Ráster para la capa con los segmentos de arroyos }
+ \label{fig:my_label}
+\end{figure}
+En la nueva capa se dirige a la ventana emergente de las propiedades de la capa tal como se realizó para la capa Strahler Order, una vez allí En la capa estilo se establece como valor mínimo 0 y valor máximo 1. El resultado del proceso es un DEM con los principales arroyos. En las Figuras 60, 61 y 62 se muestran el proceso y una superposición de la capa resultante y el mapa Standard del servicio OSM.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Propiedades de la capa de salida del procedimiento de la calculadora Ráster. }
+ \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Visualización de la capa de salida. }
+ \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Superposición de la capa de salida y el mapa Standard del servicio OSM. }
+ \label{fig:my_label}
+\end{figure}
+Para delimitar las cuencas (Drainage basins) y visualizar red de canales (Channels) se utiliza la herramienta Channel Network and Drainage Basins (Figura 63), el ráster de entrada es el DEM corregido con la herramienta Fill Sinks.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Herramienta Channel Network and Drainage Basins. }
+ \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Capas de salida de la herramienta Channel Network and Drainage Basins. }
+ \label{fig:my_label}
+\end{figure}
+Para la delimitación de una cuenca a partir de un punto se utiliza la herramienta Upslope área, esta se busca en la caja de herramientas de procesado (Figura 65), los parámetros de entrada son las coordenadas del punto (para ello se recomienda utilizar la herramienta captura de coordenadas descrita anteriormente) y el DEM corregido, la salida es un DEM con la delimitación de la cuenca (Figura 66).
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Herramienta Upslope área. }
+ \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Capa Ráster salida de la herramienta Upslope área. }
+ \label{fig:my_label}
+\end{figure}
+Al igual que en la delimitación por GRASS la capa ráster con la delimitación de la cuenca se puede convertir a una capa vectorial, para esto se dirige a la pestaña Ráster, opción Conversión, Poligonizar (Ráster a vectorial), allí se establece la dirección y nombre de la nueva capa vectorial (Figura 67). Para esta nueva capa vectorial se le pueden configurar sus propiedades de visualización como muestra la Figura 68, el resultado se muestra en la Figura 69 y 70.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Conversión de la capa Ráster con la delimitación de la cuenca a una capa vectorial. }
+ \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Propiedades de la capa vectorial. }
+ \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Visualización de la capa vectorial }
+ \label{fig:my_label}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Superposición de la capa vectorial y mapa Standard del servicio OSM. }
+ \label{fig:my_label}
+\end{figure}
+Para convertir la capa de red de canales (Channel Network and Drainage Basins) a una de tipo vectorial con información limitada por la cuenca de estudio se dirige a Vectorial<Herramientas de geoprocesado<Cortar, en la ventana se selecciona como capa de entrada la capa ráster con la red de canales (Channels), como capa de corte a la capa vectorial producto de proceso anterior y se selecciona el nombre y dirección de la nueva capa vectorial (Figura 71).
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Conversión de la capa Ráster con la red de canales a una capa tipo vectorial. }
+ \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Visualización de la capa vectorial de salida. }
+ \label{fig:my_label}
+\end{figure}
+Para crear un ráster que este limitado estrictamente por la delimitación de la cuenca se utiliza la herramienta cortar-ráster-por-capa-de-máscara presente en la caja de herramientas. La entrada de esta herramienta es el DEM corregido y la capa máscara es la capa con la delimitación de la cuenca (Figura 73). En la Figura 74 se presenta el resultado de la operación.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Herramienta para limitar una capa Ráster a la delimitación de la cuenca. }
+ \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Capa Ráster de salida. }
+ \label{fig:my_label}
+\end{figure}
+Para una mejor visualización se pude dirigir a las propiedades de la capa dando clic derecho sobre la capa y luego propiedades, una vez en la pestaña Estilo selecciona la opción Unibanda pseudocolor como tipo de renderizador y selecciona el número de clases que considere apropiado para la visualización de la capa Ráster (Figura 75).
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Pestaña de propiedades de la capa Ráster de salida. }
+ \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Visualización de la capa Ráster de salida luego de configurar sus propiedades de Estilo. }
+ \label{fig:my_label}
+\end{figure}
+Para crear un modelo de terreno se dirige a la pestaña Ráster, luego análisis y después MDT.El ráster de entrada es un archivo ráster, el cual corresponde al ráster obtenido por la herramienta cortar-ráster-por-capa-de-máscara y la salida es también un archivo ráster ahora de tipo MDT, la visualización de la herramienta y el resultado MDT se presentan en las Figuras 77 y 78.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Interfaz de la herramienta MDT (Modelos de Terreno) }
+ \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Capa Ráster de salida con el MDT. }
+ \label{fig:my_label}
+\end{figure}
+Para una mejor visualización se puede configurar la transparencia de la capa recortada (esta debe estar sobre la capa resultado del MDT), para ello se dirige a las propiedades de la capa y luego a transparencia (Figura 79).
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Ajuste de transparencia de la capa Ráster con el MDT. }
+ \label{fig:my_label}
+\end{figure}
+Una herramienta que permite visualizar los datos de un MDT y los datos vectoriales en 3D es el complemento Qgis2threejs, éste construye varios tipos de objetos 3D con paneles de configuración simple y los presenta en la vista de un explorador web. Su instalación se realiza desde la pestaña complementos como se muestra en la Figura 80.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Instalación del complemento Qgis2threejs. }
+ \label{fig:my_label}
+\end{figure}
+Una vez instalado, se dirige a complementos-Qgis2threejs y selecciona el DEM que desea visualizar en 3D y en la pestaña World se configura la exageración vertical y las dimensiones de la base. En las Figuras 81, 82 y 83 se presenta la interfaz y la visualización 3D en el navegador predeterminado para la capa recortada por máscara.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Interfaz de la herramienta Qgis2threejs. }
+ \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Visualización de los parámetros requeridos en la pestaña World de la herramienta Qgis2threejs. }
+ \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{F Visualización 3D en el navegador predeterminado. }
+ \label{fig:my_label}
+\end{figure}
+
+\subsection{Determinación de algunas caracterrísticas de la cuenca}
+
+Después de realizar los procedimientos anteriores se tiene dos capas vectoriales con información de la delimitación de la cuenca y de las corrientes presentes en la cuenca. Para determinar el área y perímetro de la cuenca.Para la determinación se utiliza la tabla de atributos de la capa vectorial resultado al utilizar la herramienta Poligonizar (Ráster a vectorial) en el apartado SAGA. Para utilizar la tabla, dar clic derecho sobre la capa vectorial Abrir tabla de atributos. Una vez se abra la ventana emergente dar clic sobre el lápiz en la barra de herramientas (conmutar el modo de edición) (Figura 84) y luego abrir calculadora de campos (Figura 85).
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Tabla de atributos de la capa vectorial con la delimitación de la cuenca.}
+ \label{fig:my_label}
+\end{figure}
+En la calculadora de campos se selecciona la opción crear un nuevo campo, se le da un nuevonombre al campo, se configura el tipo de variable (si es un número entero o decimal) la precisión y en la ventana expresión se busca la opción geometría y se selecciona la opción $area para el área de la cuenca y $perimeter para el perímetro de la cuenca. La unidad de los resultados corresponde a las unidades por defecto de la capa. Después de dar aceptar se abre de nuevo la tabla de atributos con el nuevo campo, para terminar, se activa de nuevo el lápiz en la barra de herramientas para conmutar el modo edición. La calculadora de campos y los valores de área y perímetro se muestran en las Figuras 85 y 86.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption{Calculadora de campos de la capa vectorial con la delimitación de la cuenca..}
+ \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption {Resultados de las operaciones en la calculadora de campos.}
+ \label{fig:my_label}
+\end{figure}
+Para determinar la longitud del cauce principal se utiliza el mismo procedimiento que para determinar el área y el perímetro de la cuenca ahora con la capa vectorial resultado de aplicar laherramienta Vectorial<Herramientas de geoprocesado<Cortar. Se debe tener en cuenta que en esta capa vectorial cada uno de los tramos se considera con un objeto tipo línea, de allí que se determine la longitud de cada subsegmento para posteriormente sumar aquellos que conforman el cauce principal. En la calculadora de campos se realiza el mismo procedimiento y se utiliza en la pestaña geometría la herramienta length. Nótese en la tabla de atributos que los cauces vienen discriminados según el orden lo cual permite determinar parámetros como el coeficiente de torrencialidad. A continuación, se presenta la calculadora de campos y la tabla de atributos.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption {Calculadora de campos de la capa vectorial con la información de los cauces.  }
+ \label{fig:my_label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{x.JPG}
+    \caption {Tabla de atributos de la capa vectorial con la información de los cauces..  }
+ \label{fig:my_label}
+\end{figure}
+
+\section{Herramientas de apoyo }
+A continuación, se presentan dos enlaces a videos para la delimitación de una cuenca en QGIS,tenga en cuenta que en la web existe una amplia gama de videos con información complementaria que puede buscar y aplicar.
+\begin{itemize}
+    
+
+\item QGIS Tutorial 1: Generating watersheds from DEM
+$https://www.youtube.com/watch?v=HD_ySvQ2st4$
+\item Catchment and stream delineation in QGIS:
+$https://www.youtube.com/watch?v=uSscn6ImRxU$
+\end{itemize}
+\section{Referencias }
+\begin{itemize}
+    \item González-Murillo, C. (2000). Información Geográfica SIG, herramienta esencial en la planeación de
+la producción agrícola. In F. Villamizar-Copete & R. Báez-Sañudo (Eds.), Segundo Congreso
+Iberoamericano de Tecnología Postcosecha y Agroexportaciones. Universidad Nacional de
+Colombia - Facultad de Ingeniería - Departamento de Ingeniería Agrícola.
+\end{itemize}
+\section{Enlaces }
+\begin{itemize}
+    \item EarthExplorer de la USGS. Disponible en: https://earthexplorer.usgs.gov/
+  \item Glovis Next. Disponible en: https://glovis.usgs.gov/
+  \item Remote Pixel. Disponible en: https://remotepixel.ca/
+  \item Alaska Satellite Facility. Disponible en: https://vertex.daac.asf.alaska.edu/
+  \item EarthData. Disponible en: https://search.earthdata.nasa.gov/search
+  \item Land Viewer (EOS). Disponible en: https://eos.com/landviewer/
+INPE Image Catalog. Disponible en: http://www.dgi.inpe.br/CDSR/
+  \item Earth Science Data Interface (ESDI). Disponible en: http://glcfapp.glcf.umd.edu:8080/esdi/
+  \item Global Data Explorer (USGS). Disponible en: https://gdex.cr.usgs.gov/gdex
+  \item The Copernicus Open Access Hub. Disponible en: https://scihub.copernicus.eu/
+ICDE. Disponible en: http://www.icde.org.co/servicios/geocontenidos-web
+\end{itemize}
+\end{document}
