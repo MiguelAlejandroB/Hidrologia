@@ -34,7 +34,7 @@ curva_duracion_caudales <- function(caudales) {
   s <- F * 100
   
   # Paso 6: Función auxiliar para calcular el valor z (normal estándar)
-    # NUEVA FUNCIÓN: Aproximación de Z(x) usando P(x)
+  # NUEVA FUNCIÓN: Aproximación de Z(x) usando P(x)
   # Esta función se basa en una fórmula racional que aproxima
   # el valor z (cuantil de la distribución normal estándar)
   # a partir de una probabilidad P(x).
@@ -44,19 +44,19 @@ curva_duracion_caudales <- function(caudales) {
     a1 <- 0.4361836
     a2 <- -0.1201676
     a3 <- 0.9372980
-
+    
     # Cálculo del término auxiliar t
     t <- 1 / (1 + p * x)
     
     # Evaluación del polinomio aproximado
     poly_val <- a1 * t + a2 * t^2 + a3 * t^3
-
+    
     # Resultado final de la aproximación
     Z_x <- (1 - P_x) / poly_val
-
+    
     return(Z_x)
   }
-
+  
   # Calcular los valores z para cada frecuencia acumulada
   # Se evalúa z_aprox en x = sqrt(-2 ln(1 - P)), que es una transformación común
   z <- numeric(length(F))
@@ -64,7 +64,7 @@ curva_duracion_caudales <- function(caudales) {
     x_val <- sqrt(-2 * log(1 - F[j]))  # Transformación para entrada x
     z[j] <- z_aprox(x_val, F[j])       # Aproximación de z
   }
-
+  
   # Crear y devolver un dataframe con resultados
   df <- data.frame(Q = caudales_ordenados, i = i, F = F, s = s, z = z)
   return(df)
@@ -80,35 +80,34 @@ curva_duracion_caudales <- function(caudales) {
 
 graficar_curva <- function(df) {
   # Configuración general del gráfico
-  # Se establece un fondo blanco y márgenes amplios para los ejes
   par(bg = "white", mar = c(5, 5, 4, 2))
   
   # Crear el gráfico base:
-  # type = "b" indica que se grafican tanto los puntos como las líneas.
-  # pch = 21: tipo de punto (círculo con borde).
-  # lwd = grosor de la línea; col = color del borde; bg = color del relleno.
-  # cex = tamaño de los puntos.
-  plot(df$s, df$Q, type = "b", pch = 21, lwd = 2,
+  # Se invierte el eje X con xlim = rev(range(...)) para que los valores de z
+  # (y por tanto los porcentajes excedidos) vayan de 0 a 100 en el sentido correcto
+  plot(df$z, df$Q, type = "b", pch = 21, lwd = 2,
        col = "#2c7bb6", bg = "#abd9e9", cex = 1.2,
-       xlab = "Tiempo excedido (%)",  # Etiqueta del eje X
-       ylab = "Caudal (m³/s)",        # Etiqueta del eje Y
-       main = "Curva de Duración de Caudales",  # Título del gráfico
-       xaxt = "n", yaxt = "n",        # Suprime ejes para personalizarlos
-       cex.lab = 1.3, cex.main = 1.5) # Tamaño de etiquetas
+       xlab = "Z(x)",        # Etiqueta del eje X (cuantil de la normal)
+       ylab = "Caudal (m³/s)",  # Etiqueta del eje Y (caudales)
+       main = "Curva de Duración de Caudales",
+       xaxt = "n", yaxt = "n",
+       cex.lab = 1.3, cex.main = 1.5,
+       xlim = rev(range(df$z)))  # ← Esta línea invierte el eje X
   
-  # Agregar eje X con marcas "bonitas" (función pretty sugiere marcas limpias)
-  axis(1, at = pretty(df$s), labels = pretty(df$s), cex.axis = 1.1)
+  # Eje X personalizado
+  axis(1, at = pretty(df$z), labels = pretty(df$z), cex.axis = 1.1)
   
-  # Agregar eje Y (rotación vertical de etiquetas: las = 1)
+  # Eje Y personalizado
   axis(2, at = pretty(df$Q), labels = pretty(df$Q), las = 1, cex.axis = 1.1)
   
-  # Agregar una cuadrícula ligera para mejorar la lectura del gráfico
+  # Cuadrícula ligera
   grid(col = "gray80", lty = "dotted", lwd = 1)
   
-  # Agregar líneas horizontales y verticales en las marcas principales
+  # Líneas guía horizontales y verticales
   abline(h = pretty(df$Q), col = "gray90", lty = "dotted")
-  abline(v = pretty(df$s), col = "gray90", lty = "dotted")
+  abline(v = pretty(df$z), col = "gray90", lty = "dotted")
 }
+
 
 
 
@@ -117,4 +116,5 @@ caudales <- c(12.3, 8.9, 14.2, 10.1, 9.7)
 df <- curva_duracion_caudales(caudales)
 print(df)
 graficar_curva(df)
+
 
