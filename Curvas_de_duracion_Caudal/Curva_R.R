@@ -34,34 +34,41 @@ curva_duracion_caudales <- function(caudales) {
   s <- F * 100
   
   # Paso 6: Función auxiliar para calcular el valor z (normal estándar)
-  # Esta función es una aproximación rápida a la inversa de la función de distribución
-  # normal acumulada (también conocida como función cuantil o p-norm inversa).
-  # Se basa en una fórmula empírica útil cuando no se dispone de funciones estadísticas avanzadas.
-  p_inv <- function(x) {
-    x <- sqrt(-2 * log(x))  # Transformación basada en la inversa de la función de error
-    poly <- (1 + 0.196854 * x + 0.115194 * x^2 + 0.000344 * x^3 + 0.019527 * x^4)
-    return(1 - 0.5 * poly^(-4))  # Resultado de la aproximación
+    # NUEVA FUNCIÓN: Aproximación de Z(x) usando P(x)
+  # Esta función se basa en una fórmula racional que aproxima
+  # el valor z (cuantil de la distribución normal estándar)
+  # a partir de una probabilidad P(x).
+  z_aprox <- function(x, P_x) {
+    # Constantes del modelo
+    p <- 0.33267
+    a1 <- 0.4361836
+    a2 <- -0.1201676
+    a3 <- 0.9372980
+
+    # Cálculo del término auxiliar t
+    t <- 1 / (1 + p * x)
+    
+    # Evaluación del polinomio aproximado
+    poly_val <- a1 * t + a2 * t^2 + a3 * t^3
+
+    # Resultado final de la aproximación
+    Z_x <- (1 - P_x) / poly_val
+
+    return(Z_x)
   }
-  
-  # Paso 7: Calcular los valores z para cada probabilidad acumulada
-  # Este paso convierte cada valor F en su equivalente z (valor típico de la distribución normal)
-  # Se utiliza 1 - F porque buscamos el cuantil superior.
-  z <- numeric(length(F))  # Se crea un vector vacío para almacenar los valores z
+
+  # Calcular los valores z para cada frecuencia acumulada
+  # Se evalúa z_aprox en x = sqrt(-2 ln(1 - P)), que es una transformación común
+  z <- numeric(length(F))
   for (j in seq_along(F)) {
-    z[j] <- p_inv(1 - F[j])  # Se aplica la función p_inv para cada F
+    x_val <- sqrt(-2 * log(1 - F[j]))  # Transformación para entrada x
+    z[j] <- z_aprox(x_val, F[j])       # Aproximación de z
   }
-  
-  # Paso 8: Construir y devolver un dataframe con los resultados
-  # Q: caudal ordenado
-  # i: posición del caudal ordenado
-  # F: frecuencia acumulada (no excedencia)
-  # s: porcentaje de tiempo excedido
-  # z: valor equivalente de la distribución normal estándar
+
+  # Crear y devolver un dataframe con resultados
   df <- data.frame(Q = caudales_ordenados, i = i, F = F, s = s, z = z)
-  
   return(df)
 }
-
 # -------------------------------
 # FUNCIÓN: Graficar la curva de duración
 # -------------------------------
