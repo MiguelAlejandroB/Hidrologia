@@ -98,17 +98,20 @@ curva_duracion_caudales <- function(caudales) {
   # Paso 3: Asignar un índice a cada observación ordenada (de 1 a N)
   i <- 1:N
   
-  # Paso 4: Calcular la frecuencia no excedida acumulada (F)
-  # Se utiliza la fórmula de probabilidad de Bloom: F = (i - 0.375) / (N + 0.25)
-  # Esta fórmula es una aproximación que mejora la estimación de la probabilidad
+  # Paso 4: Calcular la Probabilidad. Se utiliza la fórmula (Modelo) de probabilidad en función de la Distribución de donde provienen los datos,  
+  # de acuerdo con Cunnane, C. (1978) Unbiased Plotting Positions: A Review. Journal of Hydrology, 37, 205-222.https://doi.org/10.1016/0022-1694(78)90017-3 
+  # Como los Caudales diarios se asumen N(0,1);Se utiliza la fórmula de probabilidad de Bloom: F = (i - 0.375) / (N + 0.25)
+  # i= rango  N=tamaño de la muestra.
+  # Esta fórmula salió de simulaciones de Montecarlo; es una aproximación que mejora la estimación de la probabilidad.
   # acumulada en muestras pequeñas o medianas.
   F <- (i - 0.375) / (N + 0.25)
-  
+  # Cuando la muestra se ordena de mayor a menor corresponde a probalidad de excedencia. 
+  #Si se ordenan los  datos de Menor a mayor correspondería una asignación de probabilidad de no-excedencia 
   # Paso 5: Convertir la frecuencia a porcentaje para la curva
   # s es la probabilidad de no excedencia, expresada en porcentaje (0% a 100%).
   s <- F * 100
-  
-  # Paso 6: Función auxiliar para calcular el valor z (normal estándar)
+  # Abramowitz M. and I. Stegun (1964) Handbook of mathematical Functions. Ninth Edition. 1046 Pag. Dover Publications  
+  # Paso 6: Función auxiliarobtenida de Abramowitz and Stegun(1970) para calcular el valor z (normal estándar)
   # NUEVA FUNCIÓN: Aproximación de Z(x) usando P(x)
   # Esta función se basa en una fórmula racional que aproxima
   # el valor z (cuantil de la distribución normal estándar)
